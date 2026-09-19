@@ -1,0 +1,717 @@
+<title>Personal Best</title>
+<meta name="description" content="Every official Rubik's Cube competition since 2003. The world-record average got four times faster; a first-timer's average has barely moved, and half of them never come back.">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700;800&family=Archivo+Narrow:wght@600;700&family=Share+Tech+Mono&display=swap">
+<style>
+:root{
+  --page:#E6E8EB; --grid:#D8DBE0;
+  --card:#FFFFFF; --sunk:#F3F4F6; --line:#E3E5E9;
+  --ink:#15171B; --ink2:#454A52; --ink3:#7A808A; --rule:#CDD1D7;
+  --lcd:#1A1D17; --lcdink:#C8F25A; --lcdghost:#2C3226;
+  --red:#C41E3A; --orange:#F06A0F; --yellow:#F2C200; --green:#009E60; --blue:#0051BA; --white:#FFFFFF;
+  --rook:#0051BA; --rookband:rgba(0,81,186,.14); --rookband2:rgba(0,81,186,.26);
+  --tipbg:#15171B; --tipink:#F4F5F7;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --page:#101216; --grid:#181B20;
+  --card:#1B1E24; --sunk:#16191E; --line:#2A2E36;
+  --ink:#EEF0F3; --ink2:#B9BEC7; --ink3:#838A95; --rule:#363B44;
+  --lcd:#0B0D09; --lcdink:#C8F25A; --lcdghost:#1C2117;
+  --red:#F0506A; --orange:#FF8A3D; --yellow:#FFD84A; --green:#2FC88A; --blue:#5B9BFF; --white:#F4F5F7;
+  --rook:#6FA8FF; --rookband:rgba(111,168,255,.14); --rookband2:rgba(111,168,255,.28);
+  --tipbg:#EEF0F3; --tipink:#101216;
+}}
+:root[data-theme="dark"]{
+  --page:#101216; --grid:#181B20;
+  --card:#1B1E24; --sunk:#16191E; --line:#2A2E36;
+  --ink:#EEF0F3; --ink2:#B9BEC7; --ink3:#838A95; --rule:#363B44;
+  --lcd:#0B0D09; --lcdink:#C8F25A; --lcdghost:#1C2117;
+  --red:#F0506A; --orange:#FF8A3D; --yellow:#FFD84A; --green:#2FC88A; --blue:#5B9BFF; --white:#F4F5F7;
+  --rook:#6FA8FF; --rookband:rgba(111,168,255,.14); --rookband2:rgba(111,168,255,.28);
+  --tipbg:#EEF0F3; --tipink:#101216;
+}
+*{box-sizing:border-box}
+html{background:var(--page)}
+body{margin:0;color:var(--ink);font:400 16.5px/1.6 Archivo,"Segoe UI",system-ui,sans-serif;-webkit-font-smoothing:antialiased;
+  background-color:var(--page);
+  background-image:linear-gradient(var(--grid) 1.5px,transparent 1.5px),linear-gradient(90deg,var(--grid) 1.5px,transparent 1.5px);
+  background-size:48px 48px;background-position:-1px -1px}
+h1,h2,h3{font-family:"Archivo Narrow",Archivo,system-ui,sans-serif;font-weight:700;margin:0;line-height:1.05;text-wrap:balance}
+p{margin:0}
+a{color:var(--blue);text-underline-offset:3px}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.num,.mono{font-variant-numeric:tabular-nums}
+.mono{font-family:"Share Tech Mono",ui-monospace,monospace}
+b,strong{font-weight:700}
+.wrap{max-width:1100px;margin:0 auto;padding:0 clamp(16px,4vw,40px) 70px}
+
+/* ---- stickers ---- */
+.stk{display:inline-block;width:.8em;height:.8em;border-radius:.16em;vertical-align:-.05em;box-shadow:inset 0 0 0 1.5px rgba(0,0,0,.28)}
+.face{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:5px;background:#111;border-radius:9px;width:max-content}
+.face i{width:18px;height:18px;border-radius:4px;display:block}
+
+/* ---- hero ---- */
+.hero{padding:56px 0 20px;display:grid;grid-template-columns:minmax(0,1fr);gap:26px}
+.eyebrow{font:700 12px/1.3 Archivo,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--ink3);display:flex;gap:10px;align-items:center}
+h1{font-size:clamp(56px,10vw,120px);letter-spacing:-.015em;margin:12px 0 14px}
+.dek{font-size:clamp(17px,2vw,21px);line-height:1.5;max-width:36em;color:var(--ink2)}
+.dek b{color:var(--ink)}
+
+.race{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;max-width:860px}
+@media(max-width:640px){.race{grid-template-columns:1fr}}
+.timer{background:#2A2D33;border-radius:16px;padding:14px 14px 12px;box-shadow:0 10px 0 -2px #0E0F12,0 18px 30px -12px rgba(0,0,0,.45)}
+.timer .who{font:700 11.5px/1.2 Archivo,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#C9CDD4;display:flex;justify-content:space-between;gap:8px;margin:0 4px 9px}
+.timer .who span:last-child{color:#8C929C;letter-spacing:.06em;text-transform:none;font-weight:500}
+.lcd{position:relative;background:var(--lcd);border-radius:8px;padding:10px 16px 8px;box-shadow:inset 0 3px 10px rgba(0,0,0,.6);overflow:hidden}
+.lcd .ghost,.lcd .val{font:400 clamp(58px,9vw,92px)/1 "Share Tech Mono",monospace;letter-spacing:.02em;text-align:right;display:block}
+.lcd .ghost{color:var(--lcdghost);position:absolute;right:16px;top:10px}
+.lcd .val{color:var(--lcdink);position:relative;text-shadow:0 0 14px rgba(200,242,90,.35)}
+.lcd.stopped .val{animation:blink .9s steps(2) 2}
+@keyframes blink{50%{opacity:.25}}
+.pads{display:flex;justify-content:space-between;margin:10px 6px 0}
+.pads i{width:38px;height:12px;border-radius:6px;background:#3A3E46;display:block}
+.pads i.on{background:var(--red)}
+.pads i.go{background:var(--green)}
+.timer .foot{font-size:13px;color:#AEB3BC;margin:9px 4px 0;min-height:1.4em}
+.racebar{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-top:2px}
+.btn{font:700 14px/1 Archivo,sans-serif;color:var(--ink);background:var(--card);border:2px solid var(--ink);border-radius:999px;padding:9px 16px;cursor:pointer}
+.btn:hover{background:var(--sunk)}
+.btn[aria-pressed="true"]{background:var(--ink);color:var(--card)}
+.facts{display:flex;flex-wrap:wrap;gap:8px 22px;font-size:14px;color:var(--ink2)}
+.facts b{font:400 22px/1 "Share Tech Mono",monospace;color:var(--ink);margin-right:5px}
+
+/* ---- scorecards (sections) ---- */
+.card{background:var(--card);border:1.5px solid var(--rule);border-radius:14px;margin-top:34px;overflow:hidden;
+  box-shadow:0 1px 0 var(--rule),0 16px 34px -24px rgba(0,0,0,.35)}
+.cardhead{display:grid;grid-template-columns:auto minmax(0,1fr);border-bottom:1.5px solid var(--rule)}
+.slot{display:flex;flex-direction:column;justify-content:center;align-items:center;min-width:92px;padding:12px 10px;border-right:1.5px solid var(--rule);background:var(--sunk)}
+.slot small{font:700 10.5px/1 Archivo,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3)}
+.slot b{font:400 44px/1 "Share Tech Mono",monospace;margin-top:4px}
+.slot.x b{font-size:30px;margin-top:8px}
+.cardhead .t{padding:16px clamp(16px,3vw,28px)}
+.cardhead h2{font-size:clamp(26px,3.6vw,38px)}
+.cardhead .sub{color:var(--ink2);margin-top:6px;max-width:48em}
+.cardbody{padding:clamp(16px,3vw,28px)}
+.prose{max-width:46em;display:grid;gap:12px}
+.prose p{color:var(--ink2)}
+.prose p b{color:var(--ink)}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:start}
+@media(max-width:860px){.cols{grid-template-columns:1fr}}
+.panel h3{font:700 13px/1.3 Archivo,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px}
+
+.toolbar{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;margin:0 0 12px}
+.seg{display:inline-flex;border:2px solid var(--ink);border-radius:999px;overflow:hidden}
+.seg button{font:700 13px/1 Archivo,sans-serif;background:var(--card);color:var(--ink);border:0;padding:8px 13px;cursor:pointer}
+.seg button+button{border-left:2px solid var(--ink)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--card)}
+
+.chart{position:relative;width:100%}
+.chart canvas{display:block;width:100%;touch-action:pan-y}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13.5px;color:var(--ink2);margin:0 0 8px}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.legend i{display:inline-block;width:22px;height:0;border-top:3px solid}
+.legend i.band{height:12px;border:0;border-radius:3px}
+.legend i.dot{width:12px;height:12px;border:0;border-radius:3px;box-shadow:inset 0 0 0 1.5px rgba(0,0,0,.3)}
+.note{font-size:13.5px;color:var(--ink3);margin-top:10px;max-width:60em}
+.big{font:400 clamp(40px,6vw,64px)/1 "Share Tech Mono",monospace;letter-spacing:-.01em}
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:18px 0 6px}
+@media(max-width:700px){.kpis{grid-template-columns:1fr}}
+.kpi{background:var(--sunk);border:1.5px solid var(--line);border-radius:10px;padding:12px 14px}
+.kpi small{display:block;font:700 11px/1.3 Archivo,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px}
+.kpi .v{font:400 34px/1 "Share Tech Mono",monospace}
+.kpi p{font-size:14px;color:var(--ink2);margin-top:6px;line-height:1.4}
+
+/* ---- your time ---- */
+.entry{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-bottom:6px}
+.entry label{font-weight:700}
+.lcdin{background:var(--lcd);border-radius:10px;padding:6px 12px;box-shadow:inset 0 3px 8px rgba(0,0,0,.55)}
+.lcdin input{all:unset;font:400 44px/1 "Share Tech Mono",monospace;color:var(--lcdink);width:5.2ch;text-align:right;caret-color:var(--lcdink)}
+.entry input[type=range]{flex:1 1 220px;accent-color:var(--blue)}
+.presets{display:flex;flex-wrap:wrap;gap:6px}
+.presets button{font:600 13px/1 Archivo,sans-serif;border:1.5px solid var(--rule);background:var(--sunk);color:var(--ink2);border-radius:999px;padding:6px 10px;cursor:pointer}
+.presets button:hover{border-color:var(--ink);color:var(--ink)}
+
+/* ---- the five solves ---- */
+.sheet{width:100%;border-collapse:collapse;font-size:15px}
+.sheet th{font:700 11px/1.2 Archivo,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);text-align:left;padding:8px 10px;border-bottom:1.5px solid var(--rule)}
+.sheet td{padding:10px;border-bottom:1px solid var(--line);vertical-align:middle}
+.sheet td.n{font:400 26px/1 "Share Tech Mono",monospace;width:44px;text-align:center}
+.sheet .bar{position:relative;height:22px;background:var(--sunk);border-radius:4px;min-width:120px}
+.sheet .bar i{position:absolute;left:0;top:0;bottom:0;border-radius:4px}
+.sheet .bar .mid{position:absolute;top:-3px;bottom:-3px;border-left:2px dashed var(--ink3)}
+.sheet .bar span{position:absolute;right:8px;top:0;line-height:22px;font:400 15px "Share Tech Mono",monospace;color:var(--ink)}
+.scroll{overflow-x:auto}
+
+.method{font-size:14.5px;color:var(--ink2);display:grid;gap:10px;max-width:52em}
+.method b{color:var(--ink)}
+.method ul{margin:0;padding-left:1.2em;display:grid;gap:6px}
+.credit{margin-top:14px;border-left:4px solid var(--yellow);padding:8px 12px;background:var(--sunk);font-size:14px;color:var(--ink2)}
+footer{margin-top:30px;font-size:13px;color:var(--ink3)}
+
+#tip{position:fixed;z-index:50;pointer-events:none;background:var(--tipbg);color:var(--tipink);border-radius:8px;padding:9px 11px;
+  font-size:13px;line-height:1.4;max-width:290px;box-shadow:0 6px 18px rgba(0,0,0,.25);opacity:0;transition:opacity .08s}
+#tip.on{opacity:1}
+#tip .t{font:700 15px "Archivo Narrow",sans-serif;margin-bottom:3px}
+#tip .r{display:flex;gap:8px;align-items:center;white-space:nowrap}
+#tip .r i{width:10px;height:10px;border-radius:2px;flex:none}
+#tip .r .v{margin-left:auto;padding-left:14px;font-family:"Share Tech Mono",monospace;font-size:14px}
+#tip .m{opacity:.7}
+@media (prefers-reduced-motion: reduce){.lcd.stopped .val{animation:none}}
+</style>
+
+<div class="wrap">
+
+<header class="hero">
+  <div>
+    <div class="eyebrow"><span class="face" aria-hidden="true" id="heroface"></span>World Cube Association results, 2003 – 2026</div>
+    <h1>Personal Best</h1>
+    <p class="dek">Every official Rubik's Cube competition on record: <b id="f-people"></b> people and <b id="f-solves"></b> timed 3×3 solves. The world-record average got <b>four times faster</b>. The average a first-timer brings to their first competition has <b>barely moved</b>, and half of them never come back.</p>
+  </div>
+
+  <div class="race" id="race">
+    <div class="timer">
+      <div class="who"><span>World record average</span><span id="wrwho"></span></div>
+      <div class="lcd" id="lcdA"><span class="ghost">88.88</span><span class="val mono">0.00</span></div>
+      <div class="pads"><i></i><i></i></div>
+      <div class="foot" id="footA">&nbsp;</div>
+    </div>
+    <div class="timer">
+      <div class="who"><span>A first-timer, median</span><span id="rkwho"></span></div>
+      <div class="lcd" id="lcdB"><span class="ghost">88.88</span><span class="val mono">0.00</span></div>
+      <div class="pads"><i></i><i></i></div>
+      <div class="foot" id="footB">&nbsp;</div>
+    </div>
+  </div>
+  <div class="racebar">
+    <button class="btn" id="again" type="button">Race again (real time)</button>
+    <div class="facts">
+      <span><b id="f-comps"></b>competitions</span>
+      <span><b id="f-ctry"></b>countries</span>
+      <span><b id="f-exp"></b>export date</span>
+    </div>
+  </div>
+</header>
+
+<!-- 1 -->
+<section class="card" id="s1">
+  <div class="cardhead"><div class="slot"><small>Attempt</small><b>1</b></div>
+    <div class="t"><h2>The record and the rookie</h2>
+    <p class="sub">The world-record average against the average each year's newcomers set in their very first round.</p></div></div>
+  <div class="cardbody">
+    <div class="toolbar">
+      <div class="seg" role="group" aria-label="Scale"><button type="button" data-scale="log" aria-pressed="true">Log scale</button><button type="button" data-scale="lin" aria-pressed="false">Linear</button></div>
+    </div>
+    <div class="legend">
+      <span><i style="border-color:var(--red)"></i>World-record average</span>
+      <span><i style="border-color:var(--orange)"></i>Median of the year's 100 fastest</span>
+      <span><i style="border-color:var(--green);border-top-style:dashed"></i>Median competitor that year</span>
+      <span><i style="border-color:var(--rook)"></i>Newcomers' first average, median</span>
+      <span><i class="band" style="background:var(--rookband2)"></i>middle half</span>
+      <span><i class="band" style="background:var(--rookband)"></i>middle 80%</span>
+    </div>
+    <div class="chart" id="c1"><canvas></canvas></div>
+    <div class="kpis" id="k1"></div>
+    <div class="prose" style="margin-top:14px">
+      <p>Every line but the blue one falls. The record comes down in steps: Feliks Zemdegs held it for most of the 2010s, then Ruihang Xu, Max Park, Tymon Kolasiński and Yiheng Wang took it under five seconds, and in June 2026 Wang took it to <b id="t-wr"></b>. The median competitor gets faster too, from about 31 seconds to 20, because people who stay keep practising and the people who stay are most of each year's field.</p>
+      <p>The newcomers don't move. Each year's first-timers bring an average of about <b>35 to 40 seconds</b>, and they did in 2008 when the record was 11 seconds. The spread is the same too: a quarter of them take longer than 50 seconds. The fast tail has improved — the quickest tenth of newcomers now arrive under <b id="t-p10"></b>, where in 2008 it was 21 — but most people's first competition is still the first time they have solved a cube with a judge watching.</p>
+      <p>One year breaks the pattern. The few who came to a first competition in <b>2021</b>, when events restarted after the pandemic, were about seven seconds quicker than usual. Only the keenest turned up.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 2 -->
+<section class="card" id="s2">
+  <div class="cardhead"><div class="slot"><small>Attempt</small><b>2</b></div>
+    <div class="t"><h2>Half never come back</h2>
+    <p class="sub">Of everyone who entered a first competition at least two years before the export, the share who entered another, in any event, within two years.</p></div></div>
+  <div class="cardbody">
+    <div class="cols">
+      <div class="panel"><h3>By first average</h3><div class="chart" id="c2a"><canvas></canvas></div></div>
+      <div class="panel"><h3>By year of first competition</h3><div class="chart" id="c2b"><canvas></canvas></div>
+        <p class="note">2019 and 2020 newcomers mostly had no competitions to return to: the pandemic shut them down for up to two years.</p></div>
+    </div>
+    <div class="prose" style="margin-top:16px">
+      <p>Only <b id="t-ret"></b> of first-timers enter a second competition within two years. Speed makes a big difference. Two in three people who arrive averaging under fifteen seconds come back. About a third of those who take one to one and a half minutes do, and a quarter of those slower than that.</p>
+      <p>The very slowest are the exception. People averaging over three minutes, and people who don't finish an average at all, come back more often than people at a minute and a half. The WCA doesn't publish ages, so the data can't say why. A reasonable guess is that many of them are young children whose parents bring them back.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 3 -->
+<section class="card" id="s3">
+  <div class="cardhead"><div class="slot"><small>Attempt</small><b>3</b></div>
+    <div class="t"><h2>The ones who stay were already fast</h2>
+    <p class="sub">First averages, grouped by how many competitions each person went on to enter, and how quickly the people who stayed improved.</p></div></div>
+  <div class="cardbody">
+    <div class="cols">
+      <div class="panel"><h3>First average, by competitions entered since</h3><div class="chart" id="c3a"><canvas></canvas></div>
+        <p class="note">Bar: middle half. Dot: median. People whose first competition was at least three years before the export, so every group has had time to fill.</p></div>
+      <div class="panel"><h3>Median personal best after each competition</h3>
+        <div class="legend" id="l3b"></div>
+        <div class="chart" id="c3b"><canvas></canvas></div></div>
+    </div>
+    <div class="prose" style="margin-top:16px">
+      <p>People who competed once and never again started at a median of <b id="t-c1"></b>. People who went on to twenty or more competitions started at <b id="t-c20"></b>. The future regulars were about sixteen seconds ahead on their first day.</p>
+      <p>They do improve, and quickly at first. Among people who entered at least ten 3×3 competitions, the median personal best falls by a fifth between the first and the second, and keeps falling. By their fortieth competition the most committed are under ten seconds. So when a WCA field looks faster every year, part of that is practice and part of it is who stays. The data can't tell whether the people who left would have improved as quickly. It only shows that they started slower.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 4 -->
+<section class="card" id="s4">
+  <div class="cardhead"><div class="slot"><small>Attempt</small><b>4</b></div>
+    <div class="t"><h2>Where would you stand?</h2>
+    <p class="sub">Type an average (seconds, or m:ss) and see it against everyone who has ever set one.</p></div></div>
+  <div class="cardbody">
+    <div class="entry">
+      <label for="yt">Your average</label>
+      <div class="lcdin"><input id="yt" inputmode="decimal" value="35.00" aria-describedby="ythelp" autocomplete="off"></div>
+      <input type="range" id="ys" min="0" max="1000" value="600" aria-label="Average, slider">
+    </div>
+    <div class="presets" id="presets"></div>
+    <p class="note" id="ythelp" style="margin-top:6px">Times from 3.51 (the world record) to 10 minutes. The page keeps nothing you type.</p>
+    <div class="kpis" id="k4"></div>
+    <div class="legend" style="margin-top:14px">
+      <span><i class="band" style="background:var(--rookband2)"></i>First averages, everyone's first round</span>
+      <span><i class="band" style="background:color-mix(in srgb,var(--green) 30%,transparent)"></i>Personal bests, everyone ever</span>
+    </div>
+    <div class="chart" id="c4"><canvas></canvas></div>
+    <p class="note">Densities on a log time axis, built from 400 quantiles of each distribution. Your time's position among personal bests counts everyone with at least one completed average; a DNF-only record is left out.</p>
+  </div>
+</section>
+
+<!-- 5 -->
+<section class="card" id="s5">
+  <div class="cardhead"><div class="slot"><small>Attempt</small><b>5</b></div>
+    <div class="t"><h2>Where you start depends on where you are</h2>
+    <p class="sub">First averages of newcomers in every country that has had at least 500 of them. Coloured by continent, one sticker each.</p></div></div>
+  <div class="cardbody">
+    <div class="legend" id="l5"></div>
+    <div class="scroll"><div class="chart" id="c5" style="min-width:520px"><canvas></canvas></div></div>
+    <div class="prose" style="margin-top:16px">
+      <p>Newcomers in <b>Vietnam</b> arrive with a median first average of <b id="t-vn"></b>, and in <b>Brazil</b> <b id="t-br"></b>. The United States, with the most first-timers of all, sits in the middle. Asian countries take eleven of the thirteen fastest places.</p>
+      <p>This is more likely to reflect who a country's competitions attract than how talented its cubers are. Where competitions are rare, mostly committed cubers make the trip. Where they are common and easy to enter, people who learned last month enter too. The data can't separate the two. India, Brazil, Bolivia and Mongolia are at the slow end. The return rate in the right-hand column hardly tracks speed at all. Vietnam has the fastest newcomers and one of the lowest return rates, 39%.</p>
+    </div>
+  </div>
+</section>
+
+<!-- extra -->
+<section class="card" id="s6">
+  <div class="cardhead"><div class="slot x"><small>Extra</small><b>E</b></div>
+    <div class="t"><h2>Five solves, in order</h2>
+    <p class="sub">Every average-of-five 3×3 round without a cutoff, so all five solves are always attempted. If order didn't matter, each column would read 20%.</p></div></div>
+  <div class="cardbody">
+    <div class="scroll"><table class="sheet" id="sheet"></table></div>
+    <div class="panel" style="margin-top:22px"><h3>DNF rate on the 4th and 5th solve, by how fast the solves before it were</h3><div class="legend"><span><i class="dot" style="background:color-mix(in srgb,var(--ink3) 45%,transparent)"></i>4th solve, after three clean ones</span><span><i class="dot" style="background:var(--orange)"></i>5th solve, after four clean ones</span></div><div class="chart" id="c6"><canvas></canvas></div></div>
+    <div class="prose" style="margin-top:16px">
+      <p>The first solve is more likely to be the slowest of the five, and the last is more likely to be the fastest. People warm up during a round. The difference is small, about two rounds in a hundred, but across <b id="t-rounds"></b> rounds it isn't chance.</p>
+      <p>The fifth solve is also the one most likely to go wrong: a <b id="t-dnf5"></b> DNF rate against about 2.0% for the other four. That could be a time limit running out, but time limits catch slow solvers, and slow solvers show no jump at all. It's the fastest solvers who DNF the last solve more. Among people whose first four solves averaged under ten seconds, the DNF rate goes from <b id="t-g4"></b> on the fourth solve to <b id="t-g5"></b> on the fifth.</p><p>By the fifth solve a competitor knows exactly what they need for a personal best or the next round. Fast solvers seem to take more risks on it, and more of those solves fail.</p>
+    </div>
+  </div>
+</section>
+
+<section class="card" id="s7">
+  <div class="cardhead"><div class="slot x"><small>Judge</small><b>✓</b></div>
+    <div class="t"><h2>How this was counted</h2></div></div>
+  <div class="cardbody">
+    <div class="method">
+      <ul>
+        <li><b>Source.</b> The WCA results export of <span id="m-exp"></span>: every result of every official competition, with the five attempts of each round in a separate table. Everything here is the 3×3×3 cube.</li>
+        <li><b>First average.</b> The average from the earliest round of a person's first competition with a 3×3 result: their first round with a judge, not their best one that day. A DNF average is counted as slower than every time instead of being dropped, so the medians aren't flattered.</li>
+        <li><b>Coming back.</b> Any WCA competition in any event within 730 days of the first. People whose first competition was less than two years before the export aren't scored, because they haven't had the full two years.</li>
+        <li><b>The median competitor.</b> Each person's best average in a year, then the median across everyone who set one that year. "100 fastest" is the median of the year's 100 best of those.</li>
+        <li><b>Records.</b> Results flagged WR in the export, keeping each strict improvement.</li>
+        <li><b>What it can't say.</b> The WCA doesn't publish ages, so the page can't separate a slow eight-year-old from a slow adult. It sees only competitions, so a person who stopped competing but kept cubing looks the same as one who quit. Country is the one a person competes under.</li>
+      </ul>
+      <div class="credit">This information is based on competition results owned and maintained by the World Cube Association, published at <a href="https://worldcubeassociation.org/results">https://worldcubeassociation.org/results</a> as of <span id="m-exp2"></span>.</div>
+    </div>
+  </div>
+</section>
+
+<footer>Built from the public WCA export. Code MIT. Not affiliated with or endorsed by the World Cube Association.</footer>
+</div>
+<div id="tip" role="tooltip"></div>
+
+<script>
+const D = __DATA__;
+const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const $ = s => document.querySelector(s);
+const V = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const fmtT = t => t == null ? "DNF" : t >= 60 ? Math.floor(t / 60) + ":" + (t % 60).toFixed(2).padStart(5, "0") : t.toFixed(2);
+const fmtN = n => n.toLocaleString("en-US");
+const pct = (x, d = 0) => (x * 100).toFixed(d) + "%";
+const STK = ["--white", "--yellow", "--red", "--orange", "--blue", "--green"];
+const CONT = { "Africa": "--yellow", "Asia": "--red", "Europe": "--blue", "North America": "--green", "Oceania": "--orange", "South America": "--white" };
+
+/* ---------- static text ---------- */
+const F = D.facts, R = D.rookie, last = R[R.length - 1];
+const expTxt = new Date(D.export + "T12:00:00Z").toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+$("#f-people").textContent = fmtN(F.people);
+$("#f-solves").textContent = (F.attempts333 / 1e6).toFixed(1) + " million";
+$("#f-comps").textContent = fmtN(F.competitions);
+$("#f-ctry").textContent = F.countries;
+$("#f-exp").textContent = D.export;
+$("#m-exp").textContent = expTxt; $("#m-exp2").textContent = expTxt;
+const wrNow = D.wrAvg[D.wrAvg.length - 1];
+$("#t-wr").textContent = wrNow[1].toFixed(2) + " seconds";
+$("#t-p10").textContent = last[2].toFixed(1) + " seconds";
+$("#t-ret").textContent = pct(F.returnAll, 0);
+$("#t-c1").textContent = D.career[0][3].toFixed(1) + " seconds";
+$("#t-c20").textContent = D.career[5][3].toFixed(1);
+const cty = Object.fromEntries(D.countries.map(r => [r[0], r]));
+$("#t-vn").textContent = cty["Vietnam"][4].toFixed(1) + " seconds";
+$("#t-br").textContent = cty["Brazil"][4].toFixed(1);
+$("#t-rounds").textContent = (D.attempts.clean / 1e6).toFixed(1) + " million";
+$("#t-dnf5").textContent = pct(D.attempts.dnf[4], 2);
+const G0 = D.attempts.gamble[0]; $("#t-g4").textContent = pct(G0[2], 2); $("#t-g5").textContent = pct(G0[3], 2);
+$("#heroface").innerHTML = [4, 2, 5, 1, 0, 3, 2, 5, 4].map(i => `<i style="background:var(${STK[i]})"></i>`).join("");
+
+/* ---------- tooltip ---------- */
+const tip = $("#tip");
+function showTip(html, x, y) {
+  tip.innerHTML = html; tip.classList.add("on");
+  const r = tip.getBoundingClientRect();
+  let L = x + 16, T = y + 14;
+  if (L + r.width > innerWidth - 8) L = x - r.width - 16;
+  if (T + r.height > innerHeight - 8) T = y - r.height - 14;
+  tip.style.left = Math.max(8, L) + "px"; tip.style.top = Math.max(8, T) + "px";
+}
+const hideTip = () => tip.classList.remove("on");
+const row = (c, k, v) => `<div class="r">${c ? `<i style="background:${c}"></i>` : ""}<span>${k}</span><span class="v">${v}</span></div>`;
+
+/* ---------- canvas helper ---------- */
+function stage(id, hfn) {
+  const el = document.getElementById(id), c = el.querySelector("canvas");
+  const w = el.clientWidth, h = typeof hfn === "function" ? hfn(w) : hfn, dpr = window.devicePixelRatio || 1;
+  c.width = Math.round(w * dpr); c.height = Math.round(h * dpr); c.style.height = h + "px";
+  const g = c.getContext("2d"); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, w, h);
+  g.font = "12px Archivo, sans-serif"; g.textBaseline = "middle";
+  return { el, c, g, w, h };
+}
+function hover(c, fn) {
+  const go = e => { const r = c.getBoundingClientRect(), p = e.touches ? e.touches[0] : e; fn(p.clientX - r.left, p.clientY - r.top, p.clientX, p.clientY); };
+  c.onmousemove = go; c.ontouchstart = go; c.ontouchmove = go;
+  c.onmouseleave = () => { hideTip(); fn(null); };
+}
+
+/* ---------- hero race ---------- */
+const rk = last[4];
+$("#wrwho").textContent = wrNow[2].replace(/\s*\(.*\)/, "") + ", " + wrNow[0].slice(0, 4);
+$("#rkwho").textContent = fmtN(last[1]) + " newcomers, " + last[0];
+let raceT0 = 0, raceRAF = 0;
+function setLCD(id, t, stopped) {
+  const el = $(id), txt = t.toFixed(2); el.querySelector(".val").textContent = txt; el.querySelector(".ghost").textContent = txt.replace(/\d/g, "8"); el.classList.toggle("stopped", !!stopped);
+  const pads = el.parentElement.querySelectorAll(".pads i");
+  pads.forEach(p => { p.classList.toggle("go", !stopped && t > 0); p.classList.toggle("on", !!stopped); });
+}
+function race() {
+  cancelAnimationFrame(raceRAF);
+  $("#footA").innerHTML = "&nbsp;"; $("#footB").innerHTML = "&nbsp;";
+  if (REDUCED) { finishA(); finishB(); return; }
+  raceT0 = performance.now(); let doneA = false;
+  const step = now => {
+    const t = (now - raceT0) / 1000;
+    if (t >= wrNow[1] && !doneA) { doneA = true; finishA(); }
+    if (!doneA) setLCD("#lcdA", t);
+    if (t >= rk) { finishB(); return; }
+    setLCD("#lcdB", t);
+    if (doneA) $("#footB").textContent = t < rk - 1 ? "Still going. The record stopped " + (t - wrNow[1]).toFixed(0) + " seconds ago." : "";
+    raceRAF = requestAnimationFrame(step);
+  };
+  raceRAF = requestAnimationFrame(step);
+}
+function finishA() { setLCD("#lcdA", wrNow[1], true); $("#footA").textContent = "Stopped. " + fmtN(D.wrAvg.length) + " record averages since 2003."; }
+function finishB() { setLCD("#lcdB", rk, true); $("#footB").textContent = "Stopped. " + (rk / wrNow[1]).toFixed(1) + "× the record. In " + R.find(r => r[0] === 2008)[0] + " it was " + R.find(r => r[0] === 2008)[4].toFixed(2) + "."; }
+$("#again").onclick = race;
+setLCD("#lcdA", 0); setLCD("#lcdB", 0);
+if (REDUCED) race();
+else new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { o.disconnect(); setTimeout(race, 500); } }, { threshold: .3 }).observe($("#race"));
+
+/* ---------- 1. record vs rookie ---------- */
+let scale1 = "log";
+document.querySelectorAll("[data-scale]").forEach(b => b.onclick = () => {
+  scale1 = b.dataset.scale; document.querySelectorAll("[data-scale]").forEach(x => x.setAttribute("aria-pressed", x === b)); draw1();
+});
+const yearFrac = d => { const [y, m, dd] = d.split("-").map(Number); return y + (m - 1) / 12 + (dd - 1) / 365; };
+const expYear = yearFrac(D.export);
+function draw1(hx) {
+  const { c, g, w, h } = stage("c1", w => Math.max(320, Math.min(500, w * .5)));
+  const m = { l: 44, r: w < 560 ? 12 : 120, t: 12, b: 28 };
+  const x0 = 2003.5, x1 = expYear + .2;
+  const X = x => m.l + (x - x0) / (x1 - x0) * (w - m.l - m.r);
+  const LOG = scale1 === "log", lo = LOG ? 3 : 0, hi = LOG ? 120 : 110;
+  const Y = v => LOG ? h - m.b - (Math.log(v) - Math.log(lo)) / (Math.log(hi) - Math.log(lo)) * (h - m.t - m.b) : h - m.b - (v - lo) / (hi - lo) * (h - m.t - m.b);
+  const ticks = LOG ? [3, 5, 10, 20, 30, 60, 120] : [0, 20, 40, 60, 80, 100];
+  g.strokeStyle = V("--line"); g.fillStyle = V("--ink3"); g.lineWidth = 1; g.textAlign = "right";
+  ticks.forEach(t => { g.beginPath(); g.moveTo(m.l, Y(t)); g.lineTo(w - m.r, Y(t)); g.stroke(); g.fillText(t >= 60 ? (t / 60) + " min" : t + "s", m.l - 6, Y(t)); });
+  g.textAlign = "center";
+  for (let y = 2005; y <= 2026; y += (w < 560 ? 5 : 3)) g.fillText(y, X(y + .5), h - 10);
+  const xs = R.map(r => r[0] + .5);
+  const band = (i0, i1, col) => {
+    g.beginPath(); R.forEach((r, i) => { const v = Math.min(hi, r[i1] ?? hi); i ? g.lineTo(X(xs[i]), Y(v)) : g.moveTo(X(xs[i]), Y(v)); });
+    for (let i = R.length - 1; i >= 0; i--) g.lineTo(X(xs[i]), Y(Math.max(lo, R[i][i0]))); g.closePath(); g.fillStyle = col; g.fill();
+  };
+  // pandemic shading
+  g.fillStyle = V("--sunk"); g.fillRect(X(2020.2), m.t, X(2021.9) - X(2020.2), h - m.t - m.b);
+  g.fillStyle = V("--ink3"); g.textAlign = "center"; g.fillText("pandemic", X(2021.05), m.t + 8);
+  band(2, 6, V("--rookband")); band(3, 5, V("--rookband2"));
+  const line = (pts, col, wd, dash) => { g.setLineDash(dash || []); g.strokeStyle = col; g.lineWidth = wd; g.beginPath(); pts.forEach((p, i) => i ? g.lineTo(p[0], p[1]) : g.moveTo(p[0], p[1])); g.stroke(); g.setLineDash([]); };
+  line(D.field.map(r => [X(r[0] + .5), Y(r[2])]), V("--green"), 2.2, [6, 4]);
+  line(D.field.filter(r => r[0] >= 2005).map(r => [X(r[0] + .5), Y(r[3])]), V("--orange"), 2.2);
+  line(R.map((r, i) => [X(xs[i]), Y(r[4])]), V("--rook"), 3);
+  R.forEach((r, i) => { g.beginPath(); g.arc(X(xs[i]), Y(r[4]), 3.2, 0, 7); g.fillStyle = V("--rook"); g.fill(); });
+  // WR step
+  const wr = D.wrAvg.filter(r => r[0] >= "2004"); const pts = [];
+  wr.forEach((r, i) => { const x = X(yearFrac(r[0])); if (i) pts.push([x, Y(wr[i - 1][1])]); pts.push([x, Y(r[1])]); });
+  pts.push([X(expYear), Y(wrNow[1])]);
+  line(pts, V("--red"), 2.6);
+  wr.forEach(r => { g.beginPath(); g.arc(X(yearFrac(r[0])), Y(r[1]), 2.6, 0, 7); g.fillStyle = V("--red"); g.fill(); });
+  // end labels
+  if (m.r > 60) {
+    g.textAlign = "left"; g.font = "700 12px Archivo, sans-serif";
+    const lab = (v, t, col) => { g.fillStyle = col; g.fillText(t, w - m.r + 8, Y(v)); };
+    lab(last[4], "First-timers " + last[4].toFixed(1), V("--rook"));
+    lab(D.field.at(-1)[2], "Median " + D.field.at(-1)[2].toFixed(1), V("--green"));
+    lab(D.field.at(-1)[3], "Top 100 " + D.field.at(-1)[3].toFixed(1), V("--orange"));
+    lab(wrNow[1], "Record " + wrNow[1].toFixed(2), V("--red"));
+  }
+  if (hx != null) {
+    const yr = Math.max(2004, Math.min(last[0], Math.floor(x0 + (hx - m.l) / (w - m.l - m.r) * (x1 - x0))));
+    g.strokeStyle = V("--ink3"); g.lineWidth = 1; g.beginPath(); g.moveTo(X(yr + .5), m.t); g.lineTo(X(yr + .5), h - m.b); g.stroke();
+    return yr;
+  }
+}
+function tip1(yr, cx, cy) {
+  const r = R.find(q => q[0] === yr), f = D.field.find(q => q[0] === yr);
+  const w = D.wrAvg.filter(q => q[0] <= yr + "-12-31").at(-1);
+  showTip(`<div class="t">${yr}</div>` +
+    row(V("--red"), "Record average, year end", fmtT(w[1])) + `<div class="m" style="margin:-2px 0 4px 18px">${w[2]}</div>` +
+    row(V("--orange"), "Median of 100 fastest", fmtT(f[3])) +
+    row(V("--green"), "Median competitor", fmtT(f[2])) +
+    row(V("--rook"), "First-timers, median", fmtT(r[4])) +
+    row("", "&nbsp;&nbsp;middle half", fmtT(r[3]) + " – " + fmtT(r[5])) +
+    row("", "&nbsp;&nbsp;fastest tenth under", fmtT(r[2])) +
+    `<div class="m" style="margin-top:4px">${fmtN(r[1])} newcomers · ${fmtN(f[1])} competitors</div>`, cx, cy);
+}
+hover($("#c1 canvas"), (x, y, cx, cy) => { if (x == null) return draw1(); const yr = draw1(x); tip1(yr, cx, cy); });
+(() => {
+  const r08 = R.find(r => r[0] === 2008), w05 = D.wrAvg.filter(q => q[0] <= "2004-12-31").at(-1);
+  const k = [
+    ["Record average", w05[1].toFixed(2) + " → " + wrNow[1].toFixed(2), `${(w05[1] / wrNow[1]).toFixed(1)}× faster since the end of 2004.`],
+    ["First-timers, median", R.find(r => r[0] === 2005)[4].toFixed(1) + " → " + last[4].toFixed(1), `2005 to ${last[0]}: ${(R.find(r => r[0] === 2005)[4] / last[4]).toFixed(2)}× faster. A tenth of that improvement.`],
+    ["Newcomers per year", fmtN(R.find(r => r[0] === 2005)[1]) + " → " + fmtN(Math.max(...R.map(r => r[1]))), `2005 against the busiest year, ${R.reduce((a, b) => b[1] > a[1] ? b : a)[0]}.`],
+  ];
+  $("#k1").innerHTML = k.map(([a, b, c]) => `<div class="kpi"><small>${a}</small><div class="v">${b}</div><p>${c}</p></div>`).join("");
+})();
+
+/* ---------- 2. return ---------- */
+function draw2a(hi) {
+  const B = D.retBand, { c, g, w, h } = stage("c2a", B.length * 34 + 30);
+  const m = { l: 86, r: 58, t: 6, b: 24 }, X = v => m.l + v * (w - m.l - m.r), rh = 34;
+  g.strokeStyle = V("--line"); g.fillStyle = V("--ink3"); g.textAlign = "center";
+  [0, .25, .5, .75].forEach(t => { g.beginPath(); g.moveTo(X(t), m.t); g.lineTo(X(t), h - m.b); g.stroke(); g.fillText(pct(t), X(t), h - 9); });
+  B.forEach((b, i) => {
+    const y = m.t + i * rh;
+    g.fillStyle = i === hi ? V("--ink") : V("--blue"); g.globalAlpha = b[0] === "DNF" || b[0] === "over 3 min" ? .55 : 1;
+    g.fillRect(X(0), y + 6, X(b[2]) - X(0), rh - 12); g.globalAlpha = 1;
+    g.fillStyle = V("--ink2"); g.textAlign = "right"; g.font = "600 13px Archivo, sans-serif";
+    g.fillText(b[0] === "DNF" ? "DNF" : b[0] + (b[0].includes("min") ? "" : "s"), m.l - 8, y + rh / 2);
+    g.textAlign = "left"; g.fillStyle = V("--ink"); g.font = "15px 'Share Tech Mono', monospace";
+    g.fillText(pct(b[2]), X(b[2]) + 6, y + rh / 2); g.font = "12px Archivo, sans-serif";
+  });
+  // overall line
+  g.setLineDash([4, 4]); g.strokeStyle = V("--ink"); g.beginPath(); g.moveTo(X(F.returnAll), m.t); g.lineTo(X(F.returnAll), h - m.b); g.stroke(); g.setLineDash([]);
+  return { m, rh };
+}
+hover($("#c2a canvas"), (x, y, cx, cy) => {
+  if (x == null) return draw2a(); const { m, rh } = draw2a(-1); const i = Math.floor((y - m.t) / rh), b = D.retBand[i];
+  if (!b) return hideTip(); draw2a(i);
+  showTip(`<div class="t">First average ${b[0]}${b[0] === "DNF" || b[0].includes("min") ? "" : " s"}</div>` + row("", "Came back within 2 years", pct(b[2], 1)) + row("", "Newcomers", fmtN(b[1])), cx, cy);
+});
+function draw2b(hi) {
+  const Y2 = D.retYear, { c, g, w, h } = stage("c2b", 34 * 9 + 30);
+  const m = { l: 36, r: 8, t: 10, b: 24 }, bw = (w - m.l - m.r) / Y2.length, Y = v => h - m.b - v / .8 * (h - m.t - m.b);
+  g.strokeStyle = V("--line"); g.fillStyle = V("--ink3"); g.textAlign = "right";
+  [0, .2, .4, .6].forEach(t => { g.beginPath(); g.moveTo(m.l, Y(t)); g.lineTo(w - m.r, Y(t)); g.stroke(); g.fillText(pct(t), m.l - 4, Y(t)); });
+  Y2.forEach((r, i) => {
+    const x = m.l + i * bw, pand = r[0] === 2019 || r[0] === 2020;
+    g.fillStyle = i === hi ? V("--ink") : pand ? V("--rule") : V("--blue");
+    g.fillRect(x + bw * .15, Y(r[2]), bw * .7, Y(0) - Y(r[2]));
+    if (r[0] % 5 === 0 || i === Y2.length - 1) { g.fillStyle = V("--ink3"); g.textAlign = "center"; g.fillText(r[0], x + bw / 2, h - 9); }
+  });
+  return { m, bw };
+}
+hover($("#c2b canvas"), (x, y, cx, cy) => {
+  if (x == null) return draw2b(); const { m, bw } = draw2b(-1); const i = Math.floor((x - m.l) / bw), r = D.retYear[i];
+  if (!r) return hideTip(); draw2b(i);
+  showTip(`<div class="t">First competition in ${r[0]}</div>` + row("", "Came back within 2 years", pct(r[2], 1)) + row("", "Newcomers", fmtN(r[1])), cx, cy);
+});
+
+/* ---------- 3. career + curves ---------- */
+function draw3a(hi) {
+  const Cc = D.career, rh = 38, { g, w, h } = stage("c3a", Cc.length * rh + 30);
+  const m = { l: 64, r: 16, t: 6, b: 24 }, lo = 10, hiV = 70, X = v => m.l + (v - lo) / (hiV - lo) * (w - m.l - m.r);
+  g.strokeStyle = V("--line"); g.fillStyle = V("--ink3"); g.textAlign = "center";
+  [10, 20, 30, 40, 50, 60, 70].forEach(t => { g.beginPath(); g.moveTo(X(t), m.t); g.lineTo(X(t), h - m.b); g.stroke(); g.fillText(t + "s", X(t), h - 9); });
+  Cc.forEach((r, i) => {
+    const y = m.t + i * rh + rh / 2;
+    g.fillStyle = i === hi ? V("--ink") : V("--rookband2"); g.fillRect(X(r[2]), y - 8, X(Math.min(hiV, r[4])) - X(r[2]), 16);
+    g.beginPath(); g.arc(X(r[3]), y, 6, 0, 7); g.fillStyle = V("--rook"); g.fill(); g.strokeStyle = V("--card"); g.lineWidth = 2; g.stroke(); g.lineWidth = 1;
+    g.fillStyle = V("--ink2"); g.textAlign = "right"; g.font = "600 13px Archivo, sans-serif"; g.fillText(r[0], m.l - 10, y); g.font = "12px Archivo, sans-serif";
+  });
+  return { m, rh };
+}
+hover($("#c3a canvas"), (x, y, cx, cy) => {
+  if (x == null) return draw3a(); const { m, rh } = draw3a(-1); const i = Math.floor((y - m.t) / rh), r = D.career[i];
+  if (!r) return hideTip(); draw3a(i);
+  showTip(`<div class="t">${r[0]} competition${r[0] === "1" ? "" : "s"} entered</div>` + row(V("--rook"), "First average, median", fmtT(r[3])) + row("", "middle half", fmtT(r[2]) + " – " + fmtT(r[4])) + row("", "People", fmtN(r[1])), cx, cy);
+});
+const CURV = [["5", "--yellow"], ["10", "--orange"], ["20", "--red"], ["40", "--ink"]];
+$("#l3b").innerHTML = CURV.map(([n, c]) => `<span><i style="border-color:var(${c})"></i>${n}+ competitions <span class="m" style="color:var(--ink3)">(${fmtN(D.curves[n].n)})</span></span>`).join("");
+function draw3b(hk) {
+  const { g, w, h } = stage("c3b", w => Math.max(260, Math.min(340, w * .7)));
+  const m = { l: 40, r: 12, t: 10, b: 38 }, K = 40, lo = 8, hiV = 30;
+  const X = k => m.l + (k - 1) / (K - 1) * (w - m.l - m.r), Y = v => h - m.b - (v - lo) / (hiV - lo) * (h - m.t - m.b);
+  g.strokeStyle = V("--line"); g.fillStyle = V("--ink3"); g.textAlign = "right";
+  [10, 15, 20, 25, 30].forEach(t => { g.beginPath(); g.moveTo(m.l, Y(t)); g.lineTo(w - m.r, Y(t)); g.stroke(); g.fillText(t + "s", m.l - 5, Y(t)); });
+  g.textAlign = "center"; [1, 10, 20, 30, 40].forEach(k => g.fillText(k, X(k), h - 24));
+  g.fillText("competitions entered", (m.l + w - m.r) / 2, h - 7);
+  CURV.forEach(([n, c]) => {
+    const p = D.curves[n].pb; g.strokeStyle = V(c); g.lineWidth = 2.5; g.beginPath();
+    p.forEach((v, i) => i ? g.lineTo(X(i + 1), Y(v)) : g.moveTo(X(1), Y(v))); g.stroke();
+  });
+  if (hk) { g.strokeStyle = V("--ink3"); g.lineWidth = 1; g.beginPath(); g.moveTo(X(hk), m.t); g.lineTo(X(hk), h - m.b); g.stroke(); }
+  return { m, X, K };
+}
+hover($("#c3b canvas"), (x, y, cx, cy) => {
+  if (x == null) return draw3b(); const { m, K } = draw3b(); const w = $("#c3b").clientWidth;
+  const k = Math.max(1, Math.min(K, Math.round(1 + (x - m.l) / (w - m.l - m.r) * (K - 1)))); draw3b(k);
+  showTip(`<div class="t">After competition ${k}</div>` + CURV.filter(([n]) => D.curves[n].pb[k - 1] != null).map(([n, c]) => row(V(c), n + "+ competitions", fmtT(D.curves[n].pb[k - 1]))).join("") + `<div class="m" style="margin-top:4px">Median personal best so far</div>`, cx, cy);
+});
+
+/* ---------- 4. your time ---------- */
+const S = D.stand, TMIN = 3.51, TMAX = 600;
+const sl = $("#ys"), inp = $("#yt");
+const s2t = v => Math.exp(Math.log(TMIN) + v / 1000 * (Math.log(TMAX) - Math.log(TMIN)));
+const t2s = t => Math.round((Math.log(t) - Math.log(TMIN)) / (Math.log(TMAX) - Math.log(TMIN)) * 1000);
+function share(qs, t) { // fraction of the distribution strictly faster than t; qs = 401 quantiles, null = DNF
+  const n = qs.length - 1; if (t <= qs[0]) return 0;
+  for (let i = 1; i <= n; i++) { const q = qs[i]; if (q == null || q >= t) { const a = qs[i - 1], b = q == null ? a : q; return (i - 1 + (b > a ? (t - a) / (b - a) : 0)) / n; } }
+  return 1;
+}
+function parseT(s) {
+  s = String(s).trim().replace(",", "."); let m = s.match(/^(\d+):(\d{1,2}(?:\.\d*)?)$/);
+  if (m) return +m[1] * 60 + +m[2]; m = s.match(/^\d+(\.\d*)?$/); return m ? +s : NaN;
+}
+let yourT = 35;
+function setT(t, from) {
+  if (!isFinite(t)) return; yourT = Math.max(TMIN, Math.min(TMAX, t));
+  if (from !== "input") inp.value = fmtT(yourT);
+  if (from !== "slider") sl.value = t2s(yourT);
+  const sp = share(S.pb, yourT), sf = share(S.first, yourT);
+  const rr = D.reach.reduce((a, b) => Math.abs(b[0] - yourT) < Math.abs(a[0] - yourT) ? b : a);
+  const inRange = yourT >= D.reach[0][0] - .25 && yourT <= D.reach.at(-1)[0] + .25;
+  const k = [
+    ["Among personal bests", pct(1 - sp, sp > .99 || sp < .01 ? 1 : 0), `${fmtN(Math.round((1 - sp) * S.npb))} of ${fmtN(S.npb)} people's best averages are ${yourT <= TMIN + .001 ? "no faster than the record" : "slower than " + fmtT(yourT)}.`],
+    ["Among first averages", pct(1 - sf, sf > .99 || sf < .01 ? 1 : 0), `of newcomers' first rounds were slower. ${sf < .5 ? "You'd beat the median first-timer." : "The median first-timer would beat you."}`],
+    inRange ? ["Getting there", pct(rr[2], 0), `of people who started slower than ${fmtT(rr[0])} ever averaged ${fmtT(rr[0])} or better. Those who did took a median of ${rr[3]} competition${rr[3] === 1 ? "" : "s"}${rr[5] > rr[3] ? ` (a quarter took ${rr[5]}+)` : ""}.`]
+            : ["Getting there", "—", "Reach figures cover 6 to 90 seconds."],
+  ];
+  $("#k4").innerHTML = k.map(([a, b, c]) => `<div class="kpi"><small>${a}</small><div class="v">${b}</div><p>${c}</p></div>`).join("");
+  draw4();
+}
+inp.addEventListener("input", () => { const t = parseT(inp.value); if (isFinite(t) && t > 0) setT(t, "input"); });
+inp.addEventListener("blur", () => { inp.value = fmtT(yourT); });
+sl.addEventListener("input", () => setT(s2t(+sl.value), "slider"));
+const PRE = [["Record", wrNow[1]], ["Sub-10", 9.99], ["Sub-20", 19.99], ["Median first-timer", last[4]], ["One minute", 60], ["Two minutes", 120]];
+$("#presets").innerHTML = PRE.map(([l, t]) => `<button type="button" data-t="${t}">${l}</button>`).join("");
+$("#presets").onclick = e => { const b = e.target.closest("button"); if (b) setT(+b.dataset.t); };
+function draw4() {
+  const { g, w, h } = stage("c4", w => Math.max(220, Math.min(300, w * .36)));
+  const m = { l: 16, r: 22, t: 16, b: 28 }, lo = 3, hiV = 300;
+  const X = t => m.l + (Math.log(t) - Math.log(lo)) / (Math.log(hiV) - Math.log(lo)) * (w - m.l - m.r);
+  const dens = qs => { const out = []; for (let i = 2; i < qs.length - 3; i++) { const a = qs[i], b = qs[i + 1]; if (a == null || b == null || b <= a) continue; out.push([Math.sqrt(a * b), (1 / (qs.length - 1)) / (Math.log(b) - Math.log(a))]); } return out; };
+  const smooth = pts => pts.map((p, i) => { let s = 0, n = 0; for (let j = Math.max(0, i - 10); j <= Math.min(pts.length - 1, i + 10); j++) { s += pts[j][1]; n++; } return [p[0], s / n]; });
+  const A = smooth(dens(S.first)), B = smooth(dens(S.pb)), mx = Math.max(...A.map(p => p[1]), ...B.map(p => p[1]));
+  const Y = d => h - m.b - d / mx * (h - m.t - m.b);
+  g.strokeStyle = V("--line"); g.fillStyle = V("--ink3"); g.textAlign = "center";
+  [3, 5, 10, 20, 30, 60, 120, 300].forEach(t => { g.beginPath(); g.moveTo(X(t), m.t); g.lineTo(X(t), h - m.b); g.stroke(); g.fillText(t >= 60 ? t / 60 + " min" : t + "s", X(t), h - 10); });
+  const area = (P, fill, stroke) => { const Q = P.filter(p => p[0] >= lo && p[0] <= hiV); g.beginPath(); g.moveTo(X(Q[0][0]), Y(0)); Q.forEach(p => g.lineTo(X(p[0]), Y(p[1]))); g.lineTo(X(Q.at(-1)[0]), Y(0)); g.closePath(); g.fillStyle = fill; g.fill(); g.strokeStyle = stroke; g.lineWidth = 2; g.stroke(); };
+  g.globalAlpha = .3; area(B, V("--green"), V("--green")); g.globalAlpha = 1; area(B, "transparent", V("--green"));
+  area(A, V("--rookband2"), V("--rook"));
+  const x = X(Math.min(hiV, yourT));
+  g.strokeStyle = V("--red"); g.lineWidth = 2.5; g.beginPath(); g.moveTo(x, m.t - 4); g.lineTo(x, h - m.b); g.stroke();
+  g.fillStyle = V("--red"); g.font = "700 13px Archivo, sans-serif"; g.textAlign = x > w - 90 ? "right" : "left"; g.fillText("you: " + fmtT(yourT), x + (x > w - 90 ? -6 : 6), m.t + 2);
+}
+
+/* ---------- 5. countries ---------- */
+$("#l5").innerHTML = Object.entries(CONT).map(([k, c]) => `<span><i class="dot" style="background:var(${c})"></i>${k}</span>`).join("") + `<span style="color:var(--ink3)">right-hand column: came back within 2 years</span>`;
+function draw5(hi) {
+  const Cn = D.countries, rh = 22, { g, w, h } = stage("c5", Cn.length * rh + 34);
+  const m = { l: 138, r: 64, t: 6, b: 26 }, lo = 10, hiV = 80, X = v => m.l + (v - lo) / (hiV - lo) * (w - m.l - m.r);
+  g.strokeStyle = V("--line"); g.fillStyle = V("--ink3"); g.textAlign = "center";
+  [10, 20, 30, 40, 50, 60, 70, 80].forEach(t => { g.beginPath(); g.moveTo(X(t), m.t); g.lineTo(X(t), h - m.b); g.stroke(); g.fillText(t + "s", X(t), h - 10); });
+  const med = D.rookie.at(-1);
+  Cn.forEach((r, i) => {
+    const y = m.t + i * rh + rh / 2, col = V(CONT[r[1].replace(/^_/, "")] || "--ink3");
+    if (i === hi) { g.fillStyle = V("--sunk"); g.fillRect(0, y - rh / 2, w, rh); }
+    g.strokeStyle = V("--ink3"); g.globalAlpha = .6; g.lineWidth = 2; g.beginPath(); g.moveTo(X(r[3]), y); g.lineTo(X(Math.min(hiV, r[5])), y); g.stroke(); g.globalAlpha = 1;
+    g.fillStyle = col; g.strokeStyle = "rgba(0,0,0,.45)"; g.lineWidth = 1.2;
+    const s = 11; g.beginPath(); g.roundRect ? g.roundRect(X(r[4]) - s / 2, y - s / 2, s, s, 2.5) : g.rect(X(r[4]) - s / 2, y - s / 2, s, s); g.fill(); g.stroke();
+    g.fillStyle = i === hi ? V("--ink") : V("--ink2"); g.textAlign = "right"; g.font = (i === hi ? "700 " : "500 ") + "12.5px Archivo, sans-serif"; g.fillText(r[0], m.l - 10, y);
+    g.textAlign = "right"; g.font = "13px 'Share Tech Mono', monospace"; g.fillStyle = V("--ink3"); g.fillText(r[6] == null ? "" : pct(r[6]), w - 6, y);
+    g.font = "12px Archivo, sans-serif";
+  });
+  return { m, rh };
+}
+hover($("#c5 canvas"), (x, y, cx, cy) => {
+  if (x == null) return draw5(); const { m, rh } = draw5(-1); const i = Math.floor((y - m.t) / rh), r = D.countries[i];
+  if (!r) return hideTip(); draw5(i);
+  showTip(`<div class="t">${r[0]}</div>` + row("", "First average, median", fmtT(r[4])) + row("", "middle half", fmtT(r[3]) + " – " + fmtT(r[5])) + row("", "Came back within 2 years", r[6] == null ? "–" : pct(r[6], 1)) + row("", "Newcomers", fmtN(r[2])), cx, cy);
+});
+
+/* ---------- extra: five solves ---------- */
+(() => {
+  const A = D.attempts, mx = Math.max(...A.slowest, ...A.fastest) * 1.12, md = Math.max(...A.dnf) * 1.15;
+  const bar = (v, max, col, mid) => `<div class="bar"><i style="width:${v / max * 100}%;background:${col}"></i>${mid != null ? `<span class="mid" style="left:${mid / max * 100}%"></span>` : ""}<span>${pct(v, v < .05 ? 2 : 1)}</span></div>`;
+  $("#sheet").innerHTML = `<thead><tr><th>Solve</th><th>Slowest of the five</th><th>Fastest of the five</th><th>DNF</th></tr></thead><tbody>` +
+    [0, 1, 2, 3, 4].map(i => `<tr><td class="n">${i + 1}</td><td>${bar(A.slowest[i], mx, "color-mix(in srgb,var(--red) 55%,transparent)", .2)}</td><td>${bar(A.fastest[i], mx, "color-mix(in srgb,var(--green) 55%,transparent)", .2)}</td><td>${bar(A.dnf[i], md, i === 4 ? "var(--orange)" : "color-mix(in srgb,var(--ink3) 45%,transparent)")}</td></tr>`).join("") +
+    `</tbody>`;
+})();
+
+
+/* ---------- extra: the fifth-solve gamble ---------- */
+function draw6(hi) {
+  const G = D.attempts.gamble, rh = 40, { g, w, h } = stage("c6", G.length * rh + 30);
+  const m = { l: 90, r: 60, t: 6, b: 24 }, mx = .045, X = v => m.l + v / mx * (w - m.l - m.r);
+  g.strokeStyle = V("--line"); g.fillStyle = V("--ink3"); g.textAlign = "center";
+  [0, .01, .02, .03, .04].forEach(t => { g.beginPath(); g.moveTo(X(t), m.t); g.lineTo(X(t), h - m.b); g.stroke(); g.fillText(pct(t), X(t), h - 9); });
+  G.forEach((r, i) => {
+    const y = m.t + i * rh;
+    if (i === hi) { g.fillStyle = V("--sunk"); g.fillRect(0, y, w, rh); }
+    g.fillStyle = V("--ink3"); g.globalAlpha = .45; g.fillRect(X(0), y + 7, X(r[2]) - X(0), 11); g.globalAlpha = 1;
+    g.fillStyle = V("--orange"); g.fillRect(X(0), y + 21, X(r[3]) - X(0), 11);
+    g.fillStyle = V("--ink2"); g.textAlign = "right"; g.font = "600 13px Archivo, sans-serif";
+    g.fillText(r[0] + "s", m.l - 10, y + rh / 2);
+    const lift = r[3] / r[2] - 1; g.textAlign = "left"; g.font = "15px 'Share Tech Mono', monospace"; g.fillStyle = lift > .05 ? V("--orange") : V("--ink3");
+    g.fillText((lift >= 0 ? "+" : "") + (lift * 100).toFixed(0) + "%", X(Math.max(r[2], r[3])) + 8, y + rh / 2);
+    g.font = "12px Archivo, sans-serif";
+  });
+  return { m, rh };
+}
+hover($("#c6 canvas"), (x, y, cx, cy) => {
+  if (x == null) return draw6(); const { m, rh } = draw6(-1); const i = Math.floor((y - m.t) / rh), r = D.attempts.gamble[i];
+  if (!r) return hideTip(); draw6(i);
+  showTip(`<div class="t">Earlier solves averaging ${r[0]} s</div>` + row(V("--ink3"), "DNF on 4th solve", pct(r[2], 2)) + row(V("--orange"), "DNF on 5th solve", pct(r[3], 2)) + row("", "Rounds", fmtN(r[1])), cx, cy);
+});
+
+/* ---------- draw all, redraw on resize/theme ---------- */
+function drawAll() { draw1(); draw2a(); draw2b(); draw3a(); draw3b(); draw4(); draw5(); draw6(); }
+setT(35);
+let rT = 0; new ResizeObserver(() => { clearTimeout(rT); rT = setTimeout(drawAll, 60); }).observe(document.body);
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", drawAll);
+new MutationObserver(drawAll).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+document.fonts && document.fonts.ready.then(drawAll);
+</script>
